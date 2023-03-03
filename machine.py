@@ -6,7 +6,7 @@ import random
 import time
 
 class Node():
-    def __init__(self, id, host, port, nodes):
+    def __init__(self, id, host, port, port_list):
         # setup the logger
         self.logger = logger.add(host+".log", enqueue=True)
         # setup the logical clock
@@ -14,7 +14,7 @@ class Node():
         # setup the clock cycle
         self.clock_cycle = random.randint(1, 6)
         # set up all nodes
-        self.nodes = nodes[:]   # make a copy otherwise change in place
+        self.port_list = port_list   # make a copy otherwise change in place
         self.id = id   # machine id, used in action
         self.host = host
         self.port = port
@@ -68,21 +68,17 @@ class Node():
                 receiver_id_1 = (self.id+1) % 3
                 receiver_id_2 = (self.id+2) % 3
                 if rand==1:
-                    receiver_node = self.nodes[receiver_id_1]
-                    self.send(receiver_node.port, message)
+                    self.send(self.port_list[receiver_id_1], message)
                     # update the log with the send
                     self.logger.info(f"SENT: {message} TO MACHINE #{receiver_id_1} - GLOBAL TIME: {time.time()} - LOGICAL CLOCK TIME: {self.logical_clock}")
                 elif rand==2:
-                    receiver_node = self.nodes[receiver_id_2]
-                    self.send(receiver_node.port, message)
+                    self.send(self.port_list[receiver_id_2], message)
                     # update the log with the send
                     self.logger.info(f"SENT: {message} TO MACHINE #{receiver_id_2} - GLOBAL TIME: {time.time()} - LOGICAL CLOCK TIME: {self.logical_clock}")
                 elif rand==3:
                     # send message to both machines
-                    receiver_node_1 = self.nodes[receiver_id_1]
-                    receiver_node_2 = self.nodes[receiver_id_2]
-                    self.send(receiver_node_1.port, message)
-                    self.send(receiver_node_2.port, message)
+                    self.send(self.port_list[receiver_id_1], message)
+                    self.send(self.port_list[receiver_id_2], message)
                     # update the log with the send
                     self.logger.info(f"SENT: {message} TO MACHINE #{receiver_id_1} - GLOBAL TIME: {time.time()} - LOGICAL CLOCK TIME: {self.logical_clock}")
                     self.logger.info(f"SENT: {message} TO MACHINE #{receiver_id_2} - GLOBAL TIME: {time.time()} - LOGICAL CLOCK TIME: {self.logical_clock}")
