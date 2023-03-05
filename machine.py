@@ -6,6 +6,7 @@ import threading
 import random
 import time
 import os
+import datetime
 
 class Node():
     def __init__(self, id, host, port, port_list):
@@ -76,7 +77,7 @@ class Node():
     def cycle_action(self, seconds, run):
         # actions done in given number of seconds, and one clock cycle per second
         # log the clock cycle
-        self.logger.info(f"----------------------- Machine {self.id} is starting its {run+1}th run of {seconds} seconds -----------------------") 
+        # self.logger.info(f"----------------------- Machine {self.id} is starting its {run+1}th run of {seconds} seconds -----------------------") 
         for _ in range(seconds):
             start_time = time.time()
             for _ in range(self.clock_cycle):
@@ -87,37 +88,35 @@ class Node():
                 if len(self.message_queue) != 0:
                     # take one message off the queue, and write in the log
                     self.logger.info(
-                        f"RECEIVED: {self.message_queue.pop(0)} - GLOBAL TIME: {time.time()} - LOGICAL CLOCK TIME: {self.logical_clock} - MESSAGE QUEUE LEN: {len(self.message_queue)}")
+                        f"RECEIVED: {self.message_queue.pop(0)} - GLOBAL TIME: {datetime.datetime.now()} - LOGICAL CLOCK TIME: {self.logical_clock} - MESSAGE QUEUE LEN: {len(self.message_queue)}")
 
                 else:
                     # generate a random number in the range of 1-10
                     rand = random.randint(1, 10)
-                    message = f"Machine {self.id} has logical clock time {self.logical_clock}"
+                    message = f"'Machine {self.id} has logical clock time {self.logical_clock}'"
                     receiver_id_1 = (self.id+1) % 3
                     receiver_id_2 = (self.id+2) % 3
                     if rand == 1:
                         self.send(self.port_list[receiver_id_1], message)
                         # update the log with the send
                         self.logger.info(
-                            f"SENT: {message} TO MACHINE #{receiver_id_1} - GLOBAL TIME: {time.time()} - LOGICAL CLOCK TIME: {self.logical_clock}")
+                            f"SENT(rand=1): {message} TO MACHINE #{receiver_id_1} - GLOBAL TIME: {datetime.datetime.now()} - LOGICAL CLOCK TIME: {self.logical_clock}")
                     elif rand == 2:
                         self.send(self.port_list[receiver_id_2], message)
                         # update the log with the send
                         self.logger.info(
-                            f"SENT: {message} TO MACHINE #{receiver_id_2} - GLOBAL TIME: {time.time()} - LOGICAL CLOCK TIME: {self.logical_clock}")
+                            f"SENT(rand=2): {message} TO MACHINE #{receiver_id_2} - GLOBAL TIME: {datetime.datetime.now()} - LOGICAL CLOCK TIME: {self.logical_clock}")
                     elif rand == 3:
                         # send message to both machines
                         self.send(self.port_list[receiver_id_1], message)
                         self.send(self.port_list[receiver_id_2], message)
                         # update the log with the send
                         self.logger.info(
-                            f"SENT: {message} TO MACHINE #{receiver_id_1} - GLOBAL TIME: {time.time()} - LOGICAL CLOCK TIME: {self.logical_clock}")
-                        self.logger.info(
-                            f"SENT: {message} TO MACHINE #{receiver_id_2} - GLOBAL TIME: {time.time()} - LOGICAL CLOCK TIME: {self.logical_clock}")
+                            f"SENT(rand=3): {message} TO MACHINE #{receiver_id_1} and #{receiver_id_2} - GLOBAL TIME: {datetime.datetime.now()} - LOGICAL CLOCK TIME: {self.logical_clock}")
                     else:
                         # log the internal event
                         self.logger.info(
-                            f"INTERNAL EVENT - GLOBAL TIME: {time.time()} - LOGICAL CLOCK TIME: {self.logical_clock}")
+                            f"INTERNAL EVENT - GLOBAL TIME: {datetime.datetime.now()} - LOGICAL CLOCK TIME: {self.logical_clock}")
   
             # sleep for sometime to make sure that each clock cycle runs for exactly 1 (real world) second   
             time.sleep(1.0 - (time.time() - start_time))
