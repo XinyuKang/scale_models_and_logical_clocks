@@ -1,6 +1,7 @@
 from machine import Node
 import argparse
 import threading
+from multiprocessing import Process
 
 TIMES = 5
 SECONDS = 60
@@ -11,18 +12,20 @@ def main():
         print(f"machie ID {i}")
         machines.append(Node(i, host, port_list[i], port_list))
 
-    # # run the scale model at least 5 times for at least one minute each time
-    # print("start running clock cycles")
-    # for i in range(TIMES):
-    #     for machine in machines:
-    #         machine0_thread = threading.Thread(target=machine.cycle_action, args=(SECONDS, i))
-    #         machine0_thread.start()
-    #         machine1_thread = threading.Thread(target=machine.cycle_action, args=(SECONDS, i))
-    #         machine1_thread.start()
-    #         machine2_thread = threading.Thread(target=machine.cycle_action, args=(SECONDS, i))
-    #         machine2_thread.start()
-    #         # cycle_thread = threading.Thread(target=machine.cycle_action, args=(SECONDS, i))  # overwritten only reference to the thread, the thread itself is still running.
-    #         # cycle_thread.start()
+    # run the scale model at least 5 times for at least one minute each time
+    print("start running clock cycles")
+    for i in range(TIMES):
+        # machine0_thread = threading.Thread(target=machines[0].cycle_action, args=(SECONDS, i))
+        # machine0_thread.start()
+        # machine1_thread = threading.Thread(target=machines[1].cycle_action, args=(SECONDS, i))
+        # machine1_thread.start()
+        # machine2_thread = threading.Thread(target=machines[2].cycle_action, args=(SECONDS, i))
+        # machine2_thread.start()
+        for machine in machines:
+            cycle_thread = threading.Thread(target=machine.cycle_action, args=(SECONDS, i))  # overwritten only reference to the thread, the thread itself is still running.
+            cycle_thread.start()
+
+            # Process(target = machine.cycle_action, args = (SECONDS, i)).start()
         
 
 

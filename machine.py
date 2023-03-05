@@ -1,5 +1,6 @@
 # we use he loguru library for the logging: https://github.com/Delgan/loguru
-from loguru import logger
+
+import logging
 import socket
 import threading
 import random
@@ -10,10 +11,12 @@ class Node():
     def __init__(self, id, host, port, port_list):
         # clear up the logger if previously used
         if os.path.isfile(str(port)+".log"):
-            open(str(port)+".log", 'w').close()
-        # setup the logger
-        self.logger = logger.bind(instance_id=id)
-        self.logger.configure(handlers=[{"sink": str(port)+".log", "format": "{time} {extra[instance_id]} {message}"}])
+            os.remove(str(port)+".log")
+        # setup the logger (loguru failed on multi threads)
+        # self.logger = logger.bind(instance_id=id)
+        # self.logger.configure(handlers=[{"sink": str(port)+".log", "format": "{time} {extra[instance_id]} {message}"}])
+        # try logging instead
+        self.set_log(str(port)+".log","logger_" + str(port))
         # setup the logical clock
         self.logical_clock = 0
         # setup the clock cycle
@@ -32,6 +35,13 @@ class Node():
         # begin listening for messages
         listen_thread = threading.Thread(target=self.listen)
         listen_thread.start()
+
+    def set_log(self, filename, logger_name):
+        handler = logging.FileHandler(filename)
+        self.logger = logging.getLogger(logger_name)
+        self.logger.setLevel(logging.INFO) 
+        self.logger.addHandler(handler)
+
 
     def listen(self):
         self.server.listen(10)
@@ -54,7 +64,8 @@ class Node():
         try:
             while True:
                 data = client.recv(1024).decode("ascii")
-                self.message_queue.append(data)
+                if data!="":
+                    self.message_queue.append(data)
                 
         except Exception as e:
             print('Client Error Occurred: ', e)
@@ -67,8 +78,9 @@ class Node():
         # log the clock cycle
         self.logger.info(f"----------------------- Machine {self.id} is starting its {run+1}th run of {seconds} seconds -----------------------") 
         for _ in range(seconds):
+            start_time = time.time()
             for _ in range(self.clock_cycle):
-                start_time = time.time()
+                
                 # update the local logical clock,
                 self.logical_clock += 1
                 # if there is a message in the message queue,
@@ -106,10 +118,9 @@ class Node():
                         # log the internal event
                         self.logger.info(
                             f"INTERNAL EVENT - GLOBAL TIME: {time.time()} - LOGICAL CLOCK TIME: {self.logical_clock}")
-
-                # sleep for sometime to make sure that each clock cycle runs for exactly 1 (real world) second
-                # how many seconds should there be per cycle - how long it actually took to do the cycle
-                time.sleep(1.0/self.clock_cycle - (time.time() - start_time))
+  
+            # sleep for sometime to make sure that each clock cycle runs for exactly 1 (real world) second   
+            time.sleep(1.0 - (time.time() - start_time))
             
 
 
