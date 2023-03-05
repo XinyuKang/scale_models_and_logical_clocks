@@ -4,17 +4,24 @@ import socket
 import threading
 import random
 import time
+import os
 
 class Node():
     def __init__(self, id, host, port, port_list):
+        # clear up the logger if previously used
+        if os.path.isfile(str(port)+".log"):
+            open(str(port)+".log", 'w').close()
         # setup the logger
-        self.logger = logger.add(host+".log", enqueue=True)
+        self.logger = logger.bind(instance_id=id)
+        self.logger.configure(handlers=[{"sink": str(port)+".log", "format": "{time} {extra[instance_id]} {message}"}])
         # setup the logical clock
         self.logical_clock = 0
         # setup the clock cycle
         self.clock_cycle = random.randint(1, 6)
+        # log clock cycle and machine ID to the logger
+        self.logger.info(f"Machine {id} has clock cycle {self.clock_cycle}")
         # set up all nodes
-        self.port_list = port_list   # make a copy otherwise change in place
+        self.port_list = port_list
         self.id = id   # machine id, used in action
         self.host = host
         self.port = port
@@ -23,9 +30,12 @@ class Node():
         self.server.bind((host, port))
         self.message_queue = []
         # begin listening for messages
-        self.listen()
+        listen_thread = threading.Thread(target=self.listen)
+        listen_thread.start()
 
     def listen(self):
+        self.server.listen(10)
+        print('Listening...')
         try:
             while True:
                 client, addr = self.server.accept()
@@ -40,6 +50,7 @@ class Node():
 
 
     def receive(self, client):
+        print('Receiving...')
         try:
             while True:
                 data = client.recv(1024).decode("ascii")
@@ -51,40 +62,57 @@ class Node():
             if client:
                 client.close()
 
-    def cycle_action(self):
-        # actions done in a clock cycle
-        for _ in range(self.clock_cycle):
-            # update the local logical clock, 
-            self.logical_clock += 1
-            # if there is a message in the message queue, 
-            if len(self.message_queue) != 0:
-                # take one message off the queue, and write in the log
-                self.logger.info(f"RECEIVED: {self.pop(0)} - GLOBAL TIME: {time.time()} - LOGICAL CLOCK TIME: {self.logical_clock} - MESSAGE QUEUE LEN: {len(self.message_queue)}")
-                
-            else:
-                # generate a random number in the range of 1-10
-                rand = random.randint(1, 10)
-                message = f"Machine {self.id} has logical clock time {self.logical_clock}"
-                receiver_id_1 = (self.id+1) % 3
-                receiver_id_2 = (self.id+2) % 3
-                if rand==1:
-                    self.send(self.port_list[receiver_id_1], message)
-                    # update the log with the send
-                    self.logger.info(f"SENT: {message} TO MACHINE #{receiver_id_1} - GLOBAL TIME: {time.time()} - LOGICAL CLOCK TIME: {self.logical_clock}")
-                elif rand==2:
-                    self.send(self.port_list[receiver_id_2], message)
-                    # update the log with the send
-                    self.logger.info(f"SENT: {message} TO MACHINE #{receiver_id_2} - GLOBAL TIME: {time.time()} - LOGICAL CLOCK TIME: {self.logical_clock}")
-                elif rand==3:
-                    # send message to both machines
-                    self.send(self.port_list[receiver_id_1], message)
-                    self.send(self.port_list[receiver_id_2], message)
-                    # update the log with the send
-                    self.logger.info(f"SENT: {message} TO MACHINE #{receiver_id_1} - GLOBAL TIME: {time.time()} - LOGICAL CLOCK TIME: {self.logical_clock}")
-                    self.logger.info(f"SENT: {message} TO MACHINE #{receiver_id_2} - GLOBAL TIME: {time.time()} - LOGICAL CLOCK TIME: {self.logical_clock}")
+    def cycle_action(self, seconds, run):
+        # actions done in given number of seconds, and one clock cycle per second
+        # log the clock cycle
+        self.logger.info(f"----------------------- Machine {self.id} is starting its {run+1}th run of {seconds} seconds -----------------------") 
+        for _ in range(seconds):
+            for _ in range(self.clock_cycle):
+                start_time = time.time()
+                # update the local logical clock,
+                self.logical_clock += 1
+                # if there is a message in the message queue,
+                if len(self.message_queue) != 0:
+                    # take one message off the queue, and write in the log
+                    self.logger.info(
+                        f"RECEIVED: {self.message_queue.pop(0)} - GLOBAL TIME: {time.time()} - LOGICAL CLOCK TIME: {self.logical_clock} - MESSAGE QUEUE LEN: {len(self.message_queue)}")
+
                 else:
-                    # log the internal event
-                    self.logger.info(f"INTERNAL EVENT - GLOBAL TIME: {time.time()} - LOGICAL CLOCK TIME: {self.logical_clock}")
+                    # generate a random number in the range of 1-10
+                    rand = random.randint(1, 10)
+                    message = f"Machine {self.id} has logical clock time {self.logical_clock}"
+                    receiver_id_1 = (self.id+1) % 3
+                    receiver_id_2 = (self.id+2) % 3
+                    if rand == 1:
+                        self.send(self.port_list[receiver_id_1], message)
+                        # update the log with the send
+                        self.logger.info(
+                            f"SENT: {message} TO MACHINE #{receiver_id_1} - GLOBAL TIME: {time.time()} - LOGICAL CLOCK TIME: {self.logical_clock}")
+                    elif rand == 2:
+                        self.send(self.port_list[receiver_id_2], message)
+                        # update the log with the send
+                        self.logger.info(
+                            f"SENT: {message} TO MACHINE #{receiver_id_2} - GLOBAL TIME: {time.time()} - LOGICAL CLOCK TIME: {self.logical_clock}")
+                    elif rand == 3:
+                        # send message to both machines
+                        self.send(self.port_list[receiver_id_1], message)
+                        self.send(self.port_list[receiver_id_2], message)
+                        # update the log with the send
+                        self.logger.info(
+                            f"SENT: {message} TO MACHINE #{receiver_id_1} - GLOBAL TIME: {time.time()} - LOGICAL CLOCK TIME: {self.logical_clock}")
+                        self.logger.info(
+                            f"SENT: {message} TO MACHINE #{receiver_id_2} - GLOBAL TIME: {time.time()} - LOGICAL CLOCK TIME: {self.logical_clock}")
+                    else:
+                        # log the internal event
+                        self.logger.info(
+                            f"INTERNAL EVENT - GLOBAL TIME: {time.time()} - LOGICAL CLOCK TIME: {self.logical_clock}")
+
+                # sleep for sometime to make sure that each clock cycle runs for exactly 1 (real world) second
+                # how many seconds should there be per cycle - how long it actually took to do the cycle
+                time.sleep(1.0/self.clock_cycle - (time.time() - start_time))
+            
+
+
 
 
     def send(self, port, message):
