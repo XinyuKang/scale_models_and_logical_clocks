@@ -20,7 +20,7 @@ class LogicalClock:
 
     def update(self, other):
         with self.lock:
-            self.time = max(self.time, other)
+            self.time = max(self.time, other) + 1
 
     def get_time(self):
         with self.lock:
@@ -51,6 +51,12 @@ class Node():
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server.bind((host, port))
         self.message_queue = []
+        self.done = False
+
+        self.lock1 = threading.Lock()
+        self.lock2 = threading.Lock()
+        self.lock3 = threading.Lock()
+
         # begin listening for messages
         listen_thread = threading.Thread(target=self.listen)
         listen_thread.start()
@@ -66,12 +72,14 @@ class Node():
         self.server.listen(10)
         #print('Listening...')
         try:
-            while True:
+            while not self.done:
                 client, addr = self.server.accept()
                 #print(f"Connected with {str(addr)}")
                 t = threading.Thread(target=self.receive, args=(client,))
                 t.start()
-
+        except ConnectionAbortedError as ce: 
+            #print("getting ", ce)
+            print("QUIT")
         except Exception as e:
             print('Server Error Occurred: ', e)
             print("stop the server")
@@ -81,11 +89,12 @@ class Node():
     def receive(self, client):
         #print('Receiving...')
         try:
-            while True:
+            while not self.done:
                 data = client.recv(1024).decode("ascii")
                 if data!="":
                     self.message_queue.append(data)
-                
+                break
+
         except Exception as e:
             print('Client Error Occurred: ', e)
             print("stop the client")
@@ -95,7 +104,10 @@ class Node():
     def cycle_action(self, seconds, run):
         # actions done in given number of seconds, and one clock cycle per second
         # log the clock cycle
-        self.logger.info(f"----------------------- Machine {self.id} is starting its {run+1}th run of {seconds} seconds -----------------------") 
+        #self.logger.info(f"Machine {self.id} has clock cycle {self.clock_cycle}")
+        with self.lock3:
+            self.logger.info(f"----------------------- Machine {self.id} is starting its {run+1}th run of {seconds} seconds -----------------------") 
+            self.logger.info(f"Machine {self.id} has clock cycle {self.clock_cycle}")
         for i in range(seconds):
             start_time = time.time()
             for _ in range(self.clock_cycle):
@@ -105,7 +117,6 @@ class Node():
                     message = self.message_queue.pop(0)
                     print(message.split("-")[-1][33:-1])
                     self.logical_clock.update(int(message.split("-")[-1][33:-1]))
-                    self.logical_clock.add()
                     self.logger.info(
                         f"RECEIVED: {message} - GLOBAL TIME: {i} - LOGICAL CLOCK TIME: {self.logical_clock.get_time()} - MESSAGE QUEUE LEN: {len(self.message_queue)}")
 
@@ -118,15 +129,17 @@ class Node():
                     receiver_id_1 = (self.id+1) % 3
                     receiver_id_2 = (self.id+2) % 3
                     if rand == 1:
-                        self.send(self.port_list[receiver_id_1], message)
-                        # update the log with the send
-                        self.logger.info(
-                            f"SENT(rand=1): {message} TO MACHINE #{receiver_id_1} - GLOBAL TIME: {i} - LOGICAL CLOCK TIME: {self.logical_clock.get_time()}")
+                        with self.lock1:
+                            self.send(self.port_list[receiver_id_1], message)
+                            # update the log with the send
+                            self.logger.info(
+                                f"SENT(rand=1): {message} TO MACHINE #{receiver_id_1} - GLOBAL TIME: {i} - LOGICAL CLOCK TIME: {self.logical_clock.get_time()}")
                     elif rand == 2:
-                        self.send(self.port_list[receiver_id_2], message)
-                        # update the log with the send
-                        self.logger.info(
-                            f"SENT(rand=2): {message} TO MACHINE #{receiver_id_2} - GLOBAL TIME: {i} - LOGICAL CLOCK TIME: {self.logical_clock.get_time()}")
+                        with self.lock2:
+                            self.send(self.port_list[receiver_id_2], message)
+                            # update the log with the send
+                            self.logger.info(
+                                f"SENT(rand=2): {message} TO MACHINE #{receiver_id_2} - GLOBAL TIME: {i} - LOGICAL CLOCK TIME: {self.logical_clock.get_time()}")
                     elif rand == 3:
                         # send message to both machines
                         self.send(self.port_list[receiver_id_1], message)
@@ -142,7 +155,11 @@ class Node():
             # sleep for sometime to make sure that each clock cycle runs for exactly 1 (real world) second   
             time.sleep(max(1.0 - (time.time() - start_time),0))
         print("DONE ", self.id) 
-
+        time.sleep(5)
+        self.done = True 
+        if self.server:
+            self.server.close()
+        print("EXIT ", self.id) 
 
 
 
@@ -152,22 +169,32 @@ class Node():
         client.send(message.encode("ascii"))
 
 
-TIMES = 1
-SECONDS = 20
+TIMES = 5
+SECONDS = 10
 
 def main():
     machines = []
+    port_list = [7001, 7002, 7003]
+    '''
     for i in range(len(port_list)):
         print(f"machie ID {i}")
         machines.append(Node(i, host, port_list[i], port_list))
-
+    '''
     # run the scale model at least 5 times for at least one minute each time
     print("start running clock cycles")
-    for i in range(TIMES):
-        for machine in machines:
-            cycle_thread = threading.Thread(target=machine.cycle_action, args=(SECONDS, i))  # overwritten only reference to the thread, the thread itself is still running.
-            cycle_thread.start()
+    for j in range(TIMES):
+        machines = []
+        for i in range(len(port_list)):
+            port_list[i] += 10
 
+        for i in range(len(port_list)):
+            print(f"machie ID {i}")
+            machines.append(Node(i, host, port_list[i], port_list))
+            
+        for machine in machines:
+            cycle_thread = threading.Thread(target=machine.cycle_action, args=(SECONDS, j))  # overwritten only reference to the thread, the thread itself is still running.
+            cycle_thread.start()
+        time.sleep(SECONDS + 2)
             # Process(target = machine.cycle_action, args = (SECONDS, i)).start()
         
 
