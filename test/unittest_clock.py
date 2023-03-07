@@ -3,7 +3,6 @@ from sa import LogicalClock
 
 class TestLogicalClock(unittest.TestCase):
 
-
     def test_update_method(self):
         clock1 = LogicalClock(10)
         clock2 = LogicalClock(20)
