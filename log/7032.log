@@ -1,0 +1,27 @@
+Machine 7 has clock cycle 2
+----------------------- Machine 7 is starting its 3th run of 12 seconds -----------------------
+Machine 7 has clock cycle 2
+INTERNAL EVENT - GLOBAL TIME: 0 - LOGICAL CLOCK TIME: 1
+INTERNAL EVENT - GLOBAL TIME: 0 - LOGICAL CLOCK TIME: 2
+RECEIVED: 'Machine 6 has logical clock time 1' - GLOBAL TIME: 1 - LOGICAL CLOCK TIME: 3 - MESSAGE QUEUE LEN: 2
+RECEIVED: 'Machine 8 has logical clock time 4' - GLOBAL TIME: 1 - LOGICAL CLOCK TIME: 5 - MESSAGE QUEUE LEN: 1
+RECEIVED: 'Machine 8 has logical clock time 5' - GLOBAL TIME: 2 - LOGICAL CLOCK TIME: 6 - MESSAGE QUEUE LEN: 2
+RECEIVED: 'Machine 6 has logical clock time 3' - GLOBAL TIME: 2 - LOGICAL CLOCK TIME: 7 - MESSAGE QUEUE LEN: 1
+RECEIVED: 'Machine 8 has logical clock time 10' - GLOBAL TIME: 3 - LOGICAL CLOCK TIME: 11 - MESSAGE QUEUE LEN: 2
+RECEIVED: 'Machine 8 has logical clock time 12' - GLOBAL TIME: 3 - LOGICAL CLOCK TIME: 13 - MESSAGE QUEUE LEN: 1
+RECEIVED: 'Machine 8 has logical clock time 14' - GLOBAL TIME: 4 - LOGICAL CLOCK TIME: 15 - MESSAGE QUEUE LEN: 3
+RECEIVED: 'Machine 8 has logical clock time 17' - GLOBAL TIME: 4 - LOGICAL CLOCK TIME: 18 - MESSAGE QUEUE LEN: 2
+RECEIVED: 'Machine 8 has logical clock time 21' - GLOBAL TIME: 5 - LOGICAL CLOCK TIME: 22 - MESSAGE QUEUE LEN: 3
+RECEIVED: 'Machine 8 has logical clock time 22' - GLOBAL TIME: 5 - LOGICAL CLOCK TIME: 23 - MESSAGE QUEUE LEN: 2
+RECEIVED: 'Machine 8 has logical clock time 23' - GLOBAL TIME: 6 - LOGICAL CLOCK TIME: 24 - MESSAGE QUEUE LEN: 2
+RECEIVED: 'Machine 6 has logical clock time 25' - GLOBAL TIME: 6 - LOGICAL CLOCK TIME: 26 - MESSAGE QUEUE LEN: 1
+RECEIVED: 'Machine 8 has logical clock time 33' - GLOBAL TIME: 7 - LOGICAL CLOCK TIME: 34 - MESSAGE QUEUE LEN: 3
+RECEIVED: 'Machine 6 has logical clock time 28' - GLOBAL TIME: 7 - LOGICAL CLOCK TIME: 35 - MESSAGE QUEUE LEN: 2
+RECEIVED: 'Machine 6 has logical clock time 29' - GLOBAL TIME: 8 - LOGICAL CLOCK TIME: 36 - MESSAGE QUEUE LEN: 1
+RECEIVED: 'Machine 8 has logical clock time 36' - GLOBAL TIME: 8 - LOGICAL CLOCK TIME: 37 - MESSAGE QUEUE LEN: 0
+RECEIVED: 'Machine 8 has logical clock time 48' - GLOBAL TIME: 9 - LOGICAL CLOCK TIME: 49 - MESSAGE QUEUE LEN: 0
+SENT(rand=2): 'Machine 7 has logical clock time 50' TO MACHINE #0 - GLOBAL TIME: 9 - LOGICAL CLOCK TIME: 50
+RECEIVED: 'Machine 8 has logical clock time 52' - GLOBAL TIME: 10 - LOGICAL CLOCK TIME: 53 - MESSAGE QUEUE LEN: 0
+INTERNAL EVENT - GLOBAL TIME: 10 - LOGICAL CLOCK TIME: 54
+RECEIVED: 'Machine 8 has logical clock time 58' - GLOBAL TIME: 11 - LOGICAL CLOCK TIME: 59 - MESSAGE QUEUE LEN: 0
+INTERNAL EVENT - GLOBAL TIME: 11 - LOGICAL CLOCK TIME: 60

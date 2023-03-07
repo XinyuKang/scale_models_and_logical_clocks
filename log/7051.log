@@ -1,0 +1,15 @@
+Machine 12 has clock cycle 1
+----------------------- Machine 12 is starting its 5th run of 12 seconds -----------------------
+Machine 12 has clock cycle 1
+INTERNAL EVENT - GLOBAL TIME: 0 - LOGICAL CLOCK TIME: 1
+RECEIVED: 'Machine 13 has logical clock time 1' - GLOBAL TIME: 1 - LOGICAL CLOCK TIME: 2 - MESSAGE QUEUE LEN: 0
+RECEIVED: 'Machine 14 has logical clock time 13' - GLOBAL TIME: 2 - LOGICAL CLOCK TIME: 14 - MESSAGE QUEUE LEN: 0
+SENT(rand=2): 'Machine 12 has logical clock time 15' TO MACHINE #2 - GLOBAL TIME: 3 - LOGICAL CLOCK TIME: 15
+RECEIVED: 'Machine 14 has logical clock time 25' - GLOBAL TIME: 4 - LOGICAL CLOCK TIME: 26 - MESSAGE QUEUE LEN: 0
+RECEIVED: 'Machine 14 has logical clock time 26' - GLOBAL TIME: 5 - LOGICAL CLOCK TIME: 27 - MESSAGE QUEUE LEN: 0
+RECEIVED: 'Machine 14 has logical clock time 34' - GLOBAL TIME: 6 - LOGICAL CLOCK TIME: 35 - MESSAGE QUEUE LEN: 1
+RECEIVED: 'Machine 14 has logical clock time 35' - GLOBAL TIME: 7 - LOGICAL CLOCK TIME: 36 - MESSAGE QUEUE LEN: 0
+RECEIVED: 'Machine 14 has logical clock time 42' - GLOBAL TIME: 8 - LOGICAL CLOCK TIME: 43 - MESSAGE QUEUE LEN: 0
+RECEIVED: 'Machine 14 has logical clock time 46' - GLOBAL TIME: 9 - LOGICAL CLOCK TIME: 47 - MESSAGE QUEUE LEN: 1
+RECEIVED: 'Machine 14 has logical clock time 50' - GLOBAL TIME: 10 - LOGICAL CLOCK TIME: 51 - MESSAGE QUEUE LEN: 1
+RECEIVED: 'Machine 14 has logical clock time 52' - GLOBAL TIME: 11 - LOGICAL CLOCK TIME: 53 - MESSAGE QUEUE LEN: 1

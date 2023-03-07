@@ -1,0 +1,15 @@
+Machine 5 has clock cycle 1
+----------------------- Machine 5 is starting its 2th run of 12 seconds -----------------------
+Machine 5 has clock cycle 1
+INTERNAL EVENT - GLOBAL TIME: 0 - LOGICAL CLOCK TIME: 1
+RECEIVED: 'Machine 4 has logical clock time 4' - GLOBAL TIME: 1 - LOGICAL CLOCK TIME: 5 - MESSAGE QUEUE LEN: 0
+RECEIVED: 'Machine 3 has logical clock time 6' - GLOBAL TIME: 2 - LOGICAL CLOCK TIME: 7 - MESSAGE QUEUE LEN: 2
+RECEIVED: 'Machine 4 has logical clock time 7' - GLOBAL TIME: 3 - LOGICAL CLOCK TIME: 8 - MESSAGE QUEUE LEN: 4
+RECEIVED: 'Machine 4 has logical clock time 8' - GLOBAL TIME: 4 - LOGICAL CLOCK TIME: 9 - MESSAGE QUEUE LEN: 5
+RECEIVED: 'Machine 3 has logical clock time 13' - GLOBAL TIME: 5 - LOGICAL CLOCK TIME: 14 - MESSAGE QUEUE LEN: 4
+RECEIVED: 'Machine 4 has logical clock time 15' - GLOBAL TIME: 6 - LOGICAL CLOCK TIME: 16 - MESSAGE QUEUE LEN: 5
+RECEIVED: 'Machine 4 has logical clock time 19' - GLOBAL TIME: 7 - LOGICAL CLOCK TIME: 20 - MESSAGE QUEUE LEN: 4
+RECEIVED: 'Machine 4 has logical clock time 24' - GLOBAL TIME: 8 - LOGICAL CLOCK TIME: 25 - MESSAGE QUEUE LEN: 6
+RECEIVED: 'Machine 4 has logical clock time 26' - GLOBAL TIME: 9 - LOGICAL CLOCK TIME: 27 - MESSAGE QUEUE LEN: 9
+RECEIVED: 'Machine 4 has logical clock time 33' - GLOBAL TIME: 10 - LOGICAL CLOCK TIME: 34 - MESSAGE QUEUE LEN: 9
+RECEIVED: 'Machine 3 has logical clock time 29' - GLOBAL TIME: 11 - LOGICAL CLOCK TIME: 35 - MESSAGE QUEUE LEN: 10
