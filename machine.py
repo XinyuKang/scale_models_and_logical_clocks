@@ -77,20 +77,22 @@ class Node():
     def cycle_action(self, seconds, run):
         # actions done in given number of seconds, and one clock cycle per second
         # log the clock cycle
-        # self.logger.info(f"----------------------- Machine {self.id} is starting its {run+1}th run of {seconds} seconds -----------------------") 
+        self.logger.info(f"----------------------- Machine {self.id} is starting its {run+1}th run of {seconds} seconds -----------------------") 
         for _ in range(seconds):
             start_time = time.time()
             for _ in range(self.clock_cycle):
-                
-                # update the local logical clock,
-                self.logical_clock += 1
                 # if there is a message in the message queue,
                 if len(self.message_queue) != 0:
                     # take one message off the queue, and write in the log
+                    message = self.message_queue.pop(0)
+                    print(message.split("-")[-1][33:-1])
+                    self.logical_clock = max(self.logical_clock, int(message.split("-")[-1][33:-1])) + 1
                     self.logger.info(
-                        f"RECEIVED: {self.message_queue.pop(0)} - GLOBAL TIME: {datetime.datetime.now()} - LOGICAL CLOCK TIME: {self.logical_clock} - MESSAGE QUEUE LEN: {len(self.message_queue)}")
+                        f"RECEIVED: {message} - GLOBAL TIME: {datetime.datetime.now()} - LOGICAL CLOCK TIME: {self.logical_clock} - MESSAGE QUEUE LEN: {len(self.message_queue)}")
 
                 else:
+                    # update the local logical clock,
+                    self.logical_clock += 1
                     # generate a random number in the range of 1-10
                     rand = random.randint(1, 10)
                     message = f"'Machine {self.id} has logical clock time {self.logical_clock}'"

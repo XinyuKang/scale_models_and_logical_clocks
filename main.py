@@ -3,8 +3,8 @@ import argparse
 import threading
 from multiprocessing import Process
 
-TIMES = 5
-SECONDS = 60
+TIMES = 2
+SECONDS = 2
 
 def main():
     machines = []
