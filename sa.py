@@ -115,8 +115,11 @@ class Node():
                 if len(self.message_queue) != 0:
                     # take one message off the queue, and write in the log
                     message = self.message_queue.pop(0)
-                    print(message.split("-")[-1][33:-1])
-                    self.logical_clock.update(int(message.split("-")[-1][33:-1]))
+                    #print(message.split("-")[-1])
+                    v = message.split("-")[-1]
+                    #print("v is ", v.split()[-1][:-1])
+                    #print(message.split("-")[-1][33:-1])
+                    self.logical_clock.update(int(v.split()[-1][:-1]))
                     self.logger.info(
                         f"RECEIVED: {message} - GLOBAL TIME: {i} - LOGICAL CLOCK TIME: {self.logical_clock.get_time()} - MESSAGE QUEUE LEN: {len(self.message_queue)}")
 
@@ -188,8 +191,8 @@ def main():
             port_list[i] += 10
 
         for i in range(len(port_list)):
-            print(f"machie ID {i}")
-            machines.append(Node(i, host, port_list[i], port_list))
+            print(f"machie ID {i + 3*j}")
+            machines.append(Node(i + 3*j, host, port_list[i], port_list))
             
         for machine in machines:
             cycle_thread = threading.Thread(target=machine.cycle_action, args=(SECONDS, j))  # overwritten only reference to the thread, the thread itself is still running.
