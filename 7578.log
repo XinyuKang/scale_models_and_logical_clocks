@@ -1,0 +1,22 @@
+Machine 1 has clock cycle 1
+----------------------- Machine 1 is starting its 1th run of 20 seconds -----------------------
+INTERNAL EVENT - GLOBAL TIME: 0 - LOGICAL CLOCK TIME: 1
+RECEIVED: 'Machine 2 has logical clock time 1' - GLOBAL TIME: 1 - LOGICAL CLOCK TIME: 2 - MESSAGE QUEUE LEN: 2
+RECEIVED: 'Machine 2 has logical clock time 3' - GLOBAL TIME: 2 - LOGICAL CLOCK TIME: 4 - MESSAGE QUEUE LEN: 2
+RECEIVED: 'Machine 2 has logical clock time 6' - GLOBAL TIME: 3 - LOGICAL CLOCK TIME: 7 - MESSAGE QUEUE LEN: 4
+RECEIVED: 'Machine 2 has logical clock time 8' - GLOBAL TIME: 4 - LOGICAL CLOCK TIME: 9 - MESSAGE QUEUE LEN: 4
+RECEIVED: 'Machine 2 has logical clock time 14' - GLOBAL TIME: 5 - LOGICAL CLOCK TIME: 15 - MESSAGE QUEUE LEN: 7
+RECEIVED: 'Machine 2 has logical clock time 17' - GLOBAL TIME: 6 - LOGICAL CLOCK TIME: 18 - MESSAGE QUEUE LEN: 9
+RECEIVED: 'Machine 2 has logical clock time 18' - GLOBAL TIME: 7 - LOGICAL CLOCK TIME: 19 - MESSAGE QUEUE LEN: 12
+RECEIVED: 'Machine 0 has logical clock time 23' - GLOBAL TIME: 8 - LOGICAL CLOCK TIME: 24 - MESSAGE QUEUE LEN: 12
+RECEIVED: 'Machine 2 has logical clock time 26' - GLOBAL TIME: 9 - LOGICAL CLOCK TIME: 27 - MESSAGE QUEUE LEN: 12
+RECEIVED: 'Machine 0 has logical clock time 31' - GLOBAL TIME: 10 - LOGICAL CLOCK TIME: 32 - MESSAGE QUEUE LEN: 14
+RECEIVED: 'Machine 2 has logical clock time 28' - GLOBAL TIME: 11 - LOGICAL CLOCK TIME: 33 - MESSAGE QUEUE LEN: 16
+RECEIVED: 'Machine 2 has logical clock time 30' - GLOBAL TIME: 12 - LOGICAL CLOCK TIME: 34 - MESSAGE QUEUE LEN: 16
+RECEIVED: 'Machine 2 has logical clock time 31' - GLOBAL TIME: 13 - LOGICAL CLOCK TIME: 35 - MESSAGE QUEUE LEN: 18
+RECEIVED: 'Machine 0 has logical clock time 32' - GLOBAL TIME: 14 - LOGICAL CLOCK TIME: 36 - MESSAGE QUEUE LEN: 18
+RECEIVED: 'Machine 0 has logical clock time 35' - GLOBAL TIME: 15 - LOGICAL CLOCK TIME: 37 - MESSAGE QUEUE LEN: 20
+RECEIVED: 'Machine 0 has logical clock time 39' - GLOBAL TIME: 16 - LOGICAL CLOCK TIME: 40 - MESSAGE QUEUE LEN: 21
+RECEIVED: 'Machine 2 has logical clock time 38' - GLOBAL TIME: 17 - LOGICAL CLOCK TIME: 41 - MESSAGE QUEUE LEN: 22
+RECEIVED: 'Machine 0 has logical clock time 41' - GLOBAL TIME: 18 - LOGICAL CLOCK TIME: 42 - MESSAGE QUEUE LEN: 23
+RECEIVED: 'Machine 2 has logical clock time 41' - GLOBAL TIME: 19 - LOGICAL CLOCK TIME: 43 - MESSAGE QUEUE LEN: 26
