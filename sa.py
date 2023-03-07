@@ -20,7 +20,7 @@ class LogicalClock:
 
     def update(self, other):
         with self.lock:
-            self.time = max(self.time, other) + 1
+            self.time = max(self.time, other)
 
     def get_time(self):
         with self.lock:
@@ -105,6 +105,7 @@ class Node():
                     message = self.message_queue.pop(0)
                     print(message.split("-")[-1][33:-1])
                     self.logical_clock.update(int(message.split("-")[-1][33:-1]))
+                    self.logical_clock.add()
                     self.logger.info(
                         f"RECEIVED: {message} - GLOBAL TIME: {i} - LOGICAL CLOCK TIME: {self.logical_clock.get_time()} - MESSAGE QUEUE LEN: {len(self.message_queue)}")
 
@@ -139,8 +140,8 @@ class Node():
                             f"INTERNAL EVENT - GLOBAL TIME: {i} - LOGICAL CLOCK TIME: {self.logical_clock.get_time()}")
   
             # sleep for sometime to make sure that each clock cycle runs for exactly 1 (real world) second   
-            time.sleep(1.0 - (time.time() - start_time))
-            
+            time.sleep(max(1.0 - (time.time() - start_time),0))
+        print("DONE ", self.id) 
 
 
 
@@ -152,7 +153,7 @@ class Node():
 
 
 TIMES = 1
-SECONDS = 10
+SECONDS = 20
 
 def main():
     machines = []
@@ -175,7 +176,7 @@ if __name__ == '__main__':
     # Use like:
     # python main.py -host "127.0.0.1" -ports 5555 6666 7777
     parse.add_argument('-host', dest='host', nargs='?', default='127.0.0.1')
-    parse.add_argument('-ports', dest='port_list', nargs=3, default=[5555, 6666, 7777], help='List exactly three ports')
+    parse.add_argument('-ports', dest='port_list', nargs=3, default=[7577, 7578, 7579], help='List exactly three ports')
     args = parse.parse_args()
     host = args.host
     port_list = args.port_list
