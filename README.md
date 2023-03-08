@@ -56,4 +56,4 @@ Replace the `host` and `ports` with your own desired ones. Note that we have thr
 2. The length of the message queue can be impacted by differences in timing between the machines. For example, if one machine is running much faster than another, it may send a large number of messages to the slower machine before the slower machine has a chance to process them. This can result in a large backlog of messages in the slower machine's message queue
 
 ## Note
-One common issue we found when running the test programs was already already used. We could fix it by `lsof -i :7002` to list the active process it and then clean it by `sudo kill -9 [pid]`.
+One common issue we found when running the test programs was address already used. We could easily fix it by the command `lsof -i :7002` to list the active process it and then clean it by `sudo kill -9 [pid]`.
