@@ -1,5 +1,6 @@
 import unittest
-from sa import LogicalClock
+from sa_test import LogicalClock
+
 
 class TestLogicalClock(unittest.TestCase):
 
@@ -19,6 +20,7 @@ class TestLogicalClock(unittest.TestCase):
     def test_get_time_method(self):
         clock = LogicalClock(5)
         self.assertEqual(clock.get_time(), 5)
+
 
 if __name__ == '__main__':
     unittest.main()
